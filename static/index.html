@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calorie Tracker</title>
+    <!-- Use Bootstrap 5 -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body>
+    <div class="container mt-5">
+        <h1>Calorie Tracker</h1>
+        
+        <!-- Form untuk memilih makanan dan memasukkan nama -->
+        <form id="foodForm">
+            <div class="form-group">
+                <label for="userName">Nama Pengguna:</label>
+                <input type="text" class="form-control" id="userName" required>
+            </div>
+            <div class="form-group">
+                <label for="foodName">Pilih Makanan:</label>
+                <select class="form-control" id="foodName" required></select>
+            </div>
+            <div class="form-group">
+                <label for="servingSize">Jumlah Sajian:</label>
+                <input type="number" class="form-control" id="servingSize" min="0" max="1000" required>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Tambahkan</button> <!-- Added margin-top -->
+        </form>
+
+        <!-- Tabel untuk menampilkan data yang telah dipilih -->
+        <table class="table mt-4">
+            <thead>
+                <tr>
+                    <th scope="col">Nama Pengguna</th>
+                    <th scope="col">Makanan</th>
+                    <th scope="col">Per Saji</th>
+                    <th scope="col">Jumlah Sajian</th> <!-- New column -->
+                    <th scope="col">Kalori</th>
+                </tr>
+            </thead>
+            <tbody id="trackedFoodBody">
+                <!-- Data yang telah dipilih akan diisi melalui JavaScript -->
+            </tbody>
+        </table>
+
+        <button type="button" class="btn btn-success mt-3" id="calculateButton">Hitung Total Kalori</button>
+        
+        <!-- Container untuk menampilkan hasil total kalori -->
+        <div id="totalCaloriesResult" class="mt-3"></div>
+    </div>
+
+    <!-- Use Bootstrap 5 and jQuery Full Version -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
+    <script src="main.js"></script> <!-- Buat file JavaScript untuk berinteraksi dengan API -->
+
+    <!-- Tambahkan script untuk menangani perhitungan total kalori -->
+    <script>
+        // Event listener untuk tombol "Calculate"
+        document.getElementById('calculateButton').addEventListener('click', function () {
+            displayTotalCalories();
+        });
+
+        // Fungsi untuk menghitung total kalori dari data pada tabel
+        function calculateTotalCalories() {
+            const calorieElements = document.querySelectorAll('#trackedFoodBody td:nth-child(5)');
+            let totalCalories = 0;
+
+            calorieElements.forEach(function (element) {
+                const calories = parseFloat(element.innerText);
+                if (!isNaN(calories)) {
+                    totalCalories += calories;
+                }
+            });
+
+            return totalCalories;
+        }
+
+        // Fungsi untuk menampilkan total kalori di bawah tombol
+        function displayTotalCalories() {
+            const totalCalories = calculateTotalCalories();
+            const resultContainer = document.getElementById('totalCaloriesResult');
+
+            // Buat elemen <p> untuk menampilkan hasil
+            const resultParagraph = document.createElement('p');
+            resultParagraph.textContent = 'Total Calories: ' + totalCalories;
+
+            // Bersihkan hasil sebelumnya (jika ada)
+            resultContainer.innerHTML = '';
+
+            // Tambahkan elemen <p> ke container
+            resultContainer.appendChild(resultParagraph);
+        }
+    </script>
+</body>
+</html>
